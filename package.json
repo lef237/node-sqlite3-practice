@@ -12,5 +12,8 @@
   "devDependencies": {
     "@types/node": "^20.3.3",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.6"
   }
 }
