@@ -26,7 +26,7 @@ db.run(
         console.log("自動採番された IDは " + this.lastID + " です。");
 
         db.each(
-          // "SELECT id, title FROM books", にするとエラーが出力される
+          // "SELECT id, name FROM books", にするとエラーが出力される
           "SELECT id, title FROM books",
           (err: Error | null, row: { id: number; title: string }) => {
             if (err) {

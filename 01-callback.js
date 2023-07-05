@@ -21,7 +21,7 @@ db.run("CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT
         }
         console.log("自動採番された IDは " + this.lastID + " です。");
         db.each(
-        // "SELECT id, title FROM books", にするとエラーが出力される
+        // "SELECT id, name FROM books", にするとエラーが出力される
         "SELECT id, title FROM books", (err, row) => {
             if (err) {
                 console.error(err.message);
