@@ -12,6 +12,7 @@ db.run("CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT
         console.error(err.message);
         return;
     }
+    // const title = null; にするとエラーが出力される
     const title = "書籍タイトル";
     db.run("INSERT INTO books (title) VALUES (?)", title, function (err) {
         if (err) {
@@ -19,12 +20,15 @@ db.run("CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT
             return;
         }
         console.log("自動採番された IDは " + this.lastID + " です。");
-        db.each("SELECT id, title FROM books", (err, row) => {
+        db.each(
+        // "SELECT id, title FROM books", にするとエラーが出力される
+        "SELECT id, title FROM books", (err, row) => {
             if (err) {
                 console.error(err.message);
                 return;
             }
             console.log(row.id + ": " + row.title);
+            // "DROP TABLE users" にするとエラーが出力される
             db.run("DROP TABLE books", (err) => {
                 if (err) {
                     console.error(err.message);
