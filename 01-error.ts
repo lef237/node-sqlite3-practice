@@ -9,9 +9,10 @@ db.run(
       return;
     }
 
-    const title = "書籍タイトル";
+    const title = null;
 
     db.run(
+      // SQLITE_CONSTRAINT: NOT NULL constraint failed: books.title のエラーを出力させます
       "INSERT INTO books (title) VALUES (?)",
       title,
       function (this: sqlite3.RunResult, err: Error | null) {
@@ -22,7 +23,8 @@ db.run(
         console.log("自動採番された IDは " + this.lastID + " です。");
 
         db.each(
-          "SELECT id, title FROM books",
+          // SQLITE_ERROR: no such column: foo のエラーを出力させます
+          "SELECT id, foo FROM books",
           (err: Error | null, row: { id: number; title: string }) => {
             if (err) {
               console.error(err.message);
