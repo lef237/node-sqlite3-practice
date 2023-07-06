@@ -1,8 +1,6 @@
 import sqlite3 from "sqlite3";
 const db = new (sqlite3.verbose().Database)(":memory:");
 
-// Promiseを使いつつラッパーする感じ
-// 第2引数を使わずにrun()をする場合があるので、デフォルト値を指定している。[Unhandled null parameters · Issue #116 · TryGhost/node-sqlite3](https://github.com/TryGhost/node-sqlite3/issues/116)
 const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
   return new Promise((resolve, reject) => {
     db.run(
@@ -48,13 +46,14 @@ run(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
 )
   .then(() => {
-    const title = "書籍タイトル";
+    const title = null;
+    // SQLITE_CONSTRAINT: NOT NULL constraint failed: books.title のエラーを出力させます
     return run("INSERT INTO books (title) VALUES (?)", title);
   })
-  // thisのままだとエラーになるためRunResultとしている
   .then((runResult: sqlite3.RunResult) => {
     console.log("自動採番された IDは " + runResult.lastID + " です。");
-    return each("SELECT id, title FROM books");
+    // SQLITE_ERROR: no such column: foo のエラーを出力させます
+    return each("SELECT id, foo FROM books");
   })
   .then(() => run("DROP TABLE books"))
   .then(close)
