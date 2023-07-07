@@ -24,15 +24,18 @@ db.run(
           return;
         }
 
-        db.each(
+        db.all(
           // SQLITE_ERROR: no such column: foo のエラーを出力させます
           "SELECT id, foo FROM books",
-          (err, row: Row) => {
+          (err, rows: Row[]) => {
             if (err) {
               console.error(err.message);
               return;
             }
-            console.log(row.id + ": " + row.title);
+
+            rows.forEach((row) => {
+              console.log(row.id + ": " + row.title);
+            });
 
             db.run("DROP TABLE books", (err) => {
               if (err) {
