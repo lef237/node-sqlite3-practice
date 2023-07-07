@@ -13,8 +13,10 @@ db.run(
     db.run("INSERT INTO books (title) VALUES (?)", title, function () {
       console.log("自動採番された IDは " + this.lastID + " です。");
 
-      db.each("SELECT id, title FROM books", (err, row: Row) => {
-        console.log(row.id + ": " + row.title);
+      db.all("SELECT id, title FROM books", (err, rows: Row[]) => {
+        rows.forEach((row) => {
+          console.log(row.id + ": " + row.title);
+        });
 
         db.run("DROP TABLE books", () => {
           db.close();
