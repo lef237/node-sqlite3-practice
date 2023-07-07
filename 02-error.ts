@@ -1,4 +1,5 @@
 import sqlite3 from "sqlite3";
+
 const db = new (sqlite3.verbose().Database)(":memory:");
 
 const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
