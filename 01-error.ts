@@ -1,10 +1,12 @@
-import sqlite3 from "sqlite3";
+import * as sqlite3 from "sqlite3";
 
 const db = new (sqlite3.verbose().Database)(":memory:");
 
+type Row = { id: number; title: string };
+
 db.run(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-  (err: Error | null) => {
+  (err) => {
     if (err) {
       console.error(err.message);
       return;
@@ -16,24 +18,23 @@ db.run(
       // SQLITE_CONSTRAINT: NOT NULL constraint failed: books.title のエラーを出力させます
       "INSERT INTO books (title) VALUES (?)",
       title,
-      function (this: sqlite3.RunResult, err: Error | null) {
+      function (err) {
         if (err) {
           console.error(err.message);
           return;
         }
-        console.log("自動採番された IDは " + this.lastID + " です。");
 
         db.each(
           // SQLITE_ERROR: no such column: foo のエラーを出力させます
           "SELECT id, foo FROM books",
-          (err: Error | null, row: { id: number; title: string }) => {
+          (err, row: Row) => {
             if (err) {
               console.error(err.message);
               return;
             }
             console.log(row.id + ": " + row.title);
 
-            db.run("DROP TABLE books", (err: Error | null) => {
+            db.run("DROP TABLE books", (err) => {
               if (err) {
                 console.error(err.message);
                 return;
