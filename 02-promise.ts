@@ -16,13 +16,15 @@ const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
   });
 };
 
-const each = (query: string): Promise<void> => {
+const all = (query: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-    db.each(query, (err, row: Row) => {
+    db.all(query, (err, rows: Row[]) => {
       if (err) {
         reject(err);
       } else {
-        console.log(row.id + ": " + row.title);
+        rows.forEach((row) => {
+          console.log(row.id + ": " + row.title);
+        });
         resolve();
       }
     });
@@ -51,7 +53,7 @@ run(
   // thisのままだとエラーになるためRunResultとしている
   .then((runResult) => {
     console.log("自動採番された IDは " + runResult.lastID + " です。");
-    return each("SELECT id, title FROM books");
+    return all("SELECT id, title FROM books");
   })
   .then(() => run("DROP TABLE books"))
   .then(close)
