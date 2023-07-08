@@ -2,11 +2,9 @@ import * as sqlite3 from "sqlite3";
 
 const db = new (sqlite3.verbose().Database)(":memory:");
 
-type Row = { id: number; title: string };
-
 db.run(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-  (err) => {
+  () => {
     const title = null;
 
     db.run(
@@ -21,12 +19,12 @@ db.run(
         db.all(
           // SQLITE_ERROR: no such column: foo のエラーを出力させます
           "SELECT id, foo FROM books",
-          (err, rows: Row[]) => {
+          (err) => {
             if (err) {
               console.error(err.message);
             }
 
-            db.run("DROP TABLE books", (err) => {
+            db.run("DROP TABLE books", () => {
               db.close();
             });
           }
