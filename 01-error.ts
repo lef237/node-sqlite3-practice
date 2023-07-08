@@ -7,11 +7,6 @@ type Row = { id: number; title: string };
 db.run(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
   (err) => {
-    if (err) {
-      console.error(err.message);
-      return;
-    }
-
     const title = null;
 
     db.run(
@@ -21,7 +16,6 @@ db.run(
       function (err) {
         if (err) {
           console.error(err.message);
-          return;
         }
 
         db.all(
@@ -30,19 +24,9 @@ db.run(
           (err, rows: Row[]) => {
             if (err) {
               console.error(err.message);
-              return;
             }
 
-            rows.forEach((row) => {
-              console.log(row.id + ": " + row.title);
-            });
-
             db.run("DROP TABLE books", (err) => {
-              if (err) {
-                console.error(err.message);
-                return;
-              }
-
               db.close();
             });
           }
