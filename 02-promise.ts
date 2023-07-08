@@ -1,28 +1,24 @@
-import sqlite3 from "sqlite3";
+import * as sqlite3 from "sqlite3";
 
 const db = new (sqlite3.verbose().Database)(":memory:");
 
-// Promiseを使いつつラップする感じ
-// 第2引数を使わずにrun()をする場合があるので、デフォルト値を指定している。[Unhandled null parameters · Issue #116 · TryGhost/node-sqlite3](https://github.com/TryGhost/node-sqlite3/issues/116)
+type Row = { id: number; title: string };
+
 const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
   return new Promise((resolve, reject) => {
-    db.run(
-      query,
-      params,
-      function (this: sqlite3.RunResult, err: Error | null) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(this);
-        }
+    db.run(query, params, function (this, err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(this);
       }
-    );
+    });
   });
 };
 
 const each = (query: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-    db.each(query, (err: Error | null, row: { id: number; title: string }) => {
+    db.each(query, (err, row: Row) => {
       if (err) {
         reject(err);
       } else {
@@ -35,7 +31,7 @@ const each = (query: string): Promise<void> => {
 
 const close = (): Promise<void> => {
   return new Promise((resolve, reject) => {
-    db.close((err: Error | null) => {
+    db.close((err) => {
       if (err) {
         reject(err);
       } else {
@@ -53,12 +49,12 @@ run(
     return run("INSERT INTO books (title) VALUES (?)", title);
   })
   // thisのままだとエラーになるためRunResultとしている
-  .then((runResult: sqlite3.RunResult) => {
+  .then((runResult) => {
     console.log("自動採番された IDは " + runResult.lastID + " です。");
     return each("SELECT id, title FROM books");
   })
   .then(() => run("DROP TABLE books"))
   .then(close)
-  .catch((err: Error) => {
+  .catch((err) => {
     console.error(err.message);
   });
