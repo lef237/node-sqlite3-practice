@@ -16,9 +16,9 @@ const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
   });
 };
 
-const all = (query: string): Promise<void> => {
+const all = (query: string, params: any = []): Promise<void> => {
   return new Promise((resolve, reject) => {
-    db.all(query, (err, rows: Row[]) => {
+    db.all(query, params, (err, rows: Row[]) => {
       if (err) {
         reject(err);
       } else {
