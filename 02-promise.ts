@@ -5,40 +5,28 @@ const db = new (sqlite3.verbose().Database)(":memory:");
 type Row = { id: number; title: string };
 
 const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
-  return new Promise((resolve, reject) => {
-    db.run(query, params, function (this, err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this);
-      }
+  return new Promise((resolve) => {
+    db.run(query, params, function (this) {
+      resolve(this);
     });
   });
 };
 
 const all = (query: string, params: any = []): Promise<void> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     db.all(query, params, (err, rows: Row[]) => {
-      if (err) {
-        reject(err);
-      } else {
-        rows.forEach((row) => {
-          console.log(row.id + ": " + row.title);
-        });
-        resolve();
-      }
+      rows.forEach((row) => {
+        console.log(row.id + ": " + row.title);
+      });
+      resolve();
     });
   });
 };
 
 const close = (): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    db.close((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
+  return new Promise((resolve) => {
+    db.close(() => {
+      resolve();
     });
   });
 };
@@ -56,7 +44,4 @@ run(
     return all("SELECT id, title FROM books");
   })
   .then(() => run("DROP TABLE books"))
-  .then(close)
-  .catch((err) => {
-    console.error(err.message);
-  });
+  .then(close);
