@@ -24,9 +24,13 @@ const all = (query: string, params: any = []): Promise<void> => {
 };
 
 const close = (): Promise<void> => {
-  return new Promise((resolve) => {
-    db.close(() => {
-      resolve();
+  return new Promise((resolve, reject) => {
+    db.close((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
     });
   });
 };
