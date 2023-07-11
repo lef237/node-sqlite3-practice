@@ -4,7 +4,7 @@ const db = new (sqlite3.verbose().Database)(":memory:");
 
 const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
   return new Promise((resolve, reject) => {
-    db.run(query, params, function (this, err) {
+    db.run(query, params, function (err) {
       if (err) {
         reject(err);
       } else {

@@ -6,7 +6,7 @@ type Row = { id: number; title: string };
 
 const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
   return new Promise((resolve) => {
-    db.run(query, params, function (this) {
+    db.run(query, params, function () {
       resolve(this);
     });
   });
