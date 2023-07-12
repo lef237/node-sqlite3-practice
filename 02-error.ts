@@ -44,7 +44,7 @@ run(
 )
   .then(() => {
     const title = null;
-    return run("INSERT INTO books (title) VALUES (?)", title);
+    return run("INSERT INTO books (title) VALUES (?)", [title]);
   })
   .catch((err) => {
     console.error(err.message);

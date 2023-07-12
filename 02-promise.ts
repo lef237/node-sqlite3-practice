@@ -12,13 +12,14 @@ const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
   });
 };
 
-const all = (query: string, params: any = []): Promise<void> => {
-  return new Promise((resolve) => {
+const all = (query: string, params: any = []): Promise<Row[]> => {
+  return new Promise((resolve, reject) => {
     db.all(query, params, (err, rows: Row[]) => {
-      rows.forEach((row) => {
-        console.log(row.id + ": " + row.title);
-      });
-      resolve();
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
     });
   });
 };
@@ -40,12 +41,20 @@ run(
 )
   .then(() => {
     const title = "書籍タイトル";
-    return run("INSERT INTO books (title) VALUES (?)", title);
+    return run("INSERT INTO books (title) VALUES (?)", [title]);
   })
   // thisのままだとエラーになるためRunResultとしている
   .then((runResult) => {
     console.log("自動採番された IDは " + runResult.lastID + " です。");
     return all("SELECT id, title FROM books");
   })
+  .then((rows) => {
+    rows.forEach((row) => {
+      console.log(row.id + ": " + row.title);
+    });
+  })
   .then(() => run("DROP TABLE books"))
-  .then(close);
+  .then(close)
+  .catch((err) => {
+    console.error("次のエラーが発生しました:", err);
+  });
