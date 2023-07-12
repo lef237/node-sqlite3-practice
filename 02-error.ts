@@ -8,7 +8,6 @@ const run = (query: string, params: any = []): Promise<sqlite3.RunResult> => {
       if (err) {
         reject(err);
       } else {
-        // resolve()が無いと、エラーが適切に捕捉されないため残している
         resolve(this);
       }
     });
@@ -47,11 +46,26 @@ run(
     return run("INSERT INTO books (title) VALUES (?)", [title]);
   })
   .catch((err) => {
-    console.error(err.message);
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error(err);
+    }
     return all("SELECT id, foo FROM books");
   })
   .catch((err) => {
-    console.error(err.message);
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error(err);
+    }
   })
   .then(() => run("DROP TABLE books"))
-  .then(close);
+  .then(close)
+  .catch((err) => {
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error(err);
+    }
+  });

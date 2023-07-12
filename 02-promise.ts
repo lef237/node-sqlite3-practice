@@ -56,5 +56,9 @@ run(
   .then(() => run("DROP TABLE books"))
   .then(close)
   .catch((err) => {
-    console.error("次のエラーが発生しました:", err);
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error(err);
+    }
   });
