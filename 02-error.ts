@@ -48,8 +48,6 @@ run(
   })
   .catch((err) => {
     console.error(err.message);
-  })
-  .then(() => {
     return all("SELECT id, foo FROM books");
   })
   .catch((err) => {
