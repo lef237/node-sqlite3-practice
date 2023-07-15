@@ -1,5 +1,5 @@
 import * as sqlite3 from "sqlite3";
-import { run, all, close } from "./02-lib";
+import { run, all, close } from "./lib/db-operation";
 
 const db = new (sqlite3.verbose().Database)(":memory:");
 
