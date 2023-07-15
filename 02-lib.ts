@@ -1,5 +1,5 @@
 import * as sqlite3 from "sqlite3";
-import { Database } from "sqlite3";
+import type { Database } from "sqlite3";
 
 type Row = { id: number; title: string };
 

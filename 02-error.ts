@@ -11,27 +11,12 @@ run(
     const title = null;
     return run(db, "INSERT INTO books (title) VALUES (?)", [title]);
   })
-  .catch((err) => {
-    if (err instanceof Error) {
-      console.error(err.message);
-    } else {
-      console.error(err);
-    }
+  .catch((err: Error) => {
+    console.error(err.message);
     return all(db, "SELECT id, foo FROM books");
   })
-  .catch((err) => {
-    if (err instanceof Error) {
-      console.error(err.message);
-    } else {
-      console.error(err);
-    }
+  .catch((err: Error) => {
+    console.error(err.message);
+    () => run(db, "DROP TABLE books");
   })
-  .then(() => run(db, "DROP TABLE books"))
-  .then(() => close(db))
-  .catch((err) => {
-    if (err instanceof Error) {
-      console.error(err.message);
-    } else {
-      console.error(err);
-    }
-  });
+  .then(() => close(db));

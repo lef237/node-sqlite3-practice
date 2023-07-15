@@ -19,13 +19,6 @@ run(
     rows.forEach((row) => {
       console.log(row.id + ": " + row.title);
     });
+    () => run(db, "DROP TABLE books");
   })
-  .then(() => run(db, "DROP TABLE books"))
-  .then(() => close(db))
-  .catch((err) => {
-    if (err instanceof Error) {
-      console.error(err.message);
-    } else {
-      console.error(err);
-    }
-  });
+  .then(() => close(db));
