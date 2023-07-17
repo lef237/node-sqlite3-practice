@@ -19,6 +19,6 @@ run(
     rows.forEach((row) => {
       console.log(row.id + ": " + row.title);
     });
-    () => run(db, "DROP TABLE books");
+    return run(db, "DROP TABLE books");
   })
   .then(() => close(db));

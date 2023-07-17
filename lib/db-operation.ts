@@ -1,5 +1,4 @@
-import * as sqlite3 from "sqlite3";
-import type { Database } from "sqlite3";
+import type { Database, RunResult } from "sqlite3";
 
 type Row = { id: number; title: string };
 
@@ -7,7 +6,7 @@ export const run = (
   db: Database,
   query: string,
   params: any = []
-): Promise<sqlite3.RunResult> => {
+): Promise<RunResult> => {
   return new Promise((resolve, reject) => {
     db.run(query, params, function (err) {
       if (err) {

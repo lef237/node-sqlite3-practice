@@ -17,6 +17,6 @@ run(
   })
   .catch((err: Error) => {
     console.error(err.message);
-    () => run(db, "DROP TABLE books");
+    return run(db, "DROP TABLE books");
   })
   .then(() => close(db));
