@@ -11,12 +11,16 @@ run(
     const title = null;
     return run(db, "INSERT INTO books (title) VALUES (?)", [title]);
   })
-  .catch((err: Error) => {
-    console.error(err.message);
+  .catch((err) => {
+    if (err instanceof Error) {
+      console.error(err.message);
+    }
     return all(db, "SELECT id, foo FROM books");
   })
-  .catch((err: Error) => {
-    console.error(err.message);
+  .catch((err) => {
+    if (err instanceof Error) {
+      console.error(err.message);
+    }
     return run(db, "DROP TABLE books");
   })
   .then(() => close(db));
