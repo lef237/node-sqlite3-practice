@@ -11,7 +11,6 @@ const main = async () => {
     );
 
     const title = "書籍タイトル";
-
     const runResult = await run(db, "INSERT INTO books (title) VALUES (?)", [
       title,
     ]);
